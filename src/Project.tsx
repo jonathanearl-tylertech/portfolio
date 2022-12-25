@@ -81,10 +81,10 @@ const Project: Component = () => {
           >
             <img class="max-w-[764px] h-[764px] object-contain bg-black" src={selectedProject()?.metadata.media[0]} />
             <div class="w-[500px] bg-white">
-              <header>
-                <h1>{selectedProject()?.metadata.name}</h1>
-              </header>
-              <div innerHTML={selectedProject()?.content}></div>
+              <div 
+                class="markdown-body p-[24px]"
+                innerHTML={selectedProject()?.content}
+              />
             </div>
           </div>
         </div>
