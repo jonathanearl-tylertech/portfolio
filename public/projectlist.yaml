@@ -2,7 +2,7 @@ projects:
 - id: 0
   url: /portfolio.md
   media:
-  - /dog.jpg
+  - /porfolio.excalidraw.svg
 - id: 1
   url: /other.md
   media:

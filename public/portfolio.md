@@ -8,7 +8,7 @@ tags:
 - frontend
 - javascript
 media:
-- /dog.jpg
+- /porfolio.excalidraw.svg
 ---
 # Porfolio
 This is a simple project to demo my work, but mostly a reason to play around with solidjs
