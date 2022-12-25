@@ -1,13 +1,13 @@
 # project modal
 ## kubernetes
-- [ ] ingress
-- [ ] deployment
-- [ ] service
+- [x] deployment
+- [x] service
+- [x] ingress
 - [ ] ci/cd
 
 ## cdn
-- [ ] cloudflare
-- [ ] dns records
+- [x] cloudflare
+- [x] dns records
 
 ## responsive
 - [ ] resize modal with window width
