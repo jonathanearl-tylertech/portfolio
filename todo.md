@@ -1,4 +1,4 @@
-# project modal
+# todo
 ## kubernetes
 - [x] deployment
 - [x] service
