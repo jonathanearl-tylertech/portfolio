@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, For, Show } from 'solid-js';
+import { Component, createEffect, createSignal, For, Show, onCleanup } from 'solid-js';
 import { FaSolidX, FaSolidArrowRight, FaSolidArrowLeft } from "solid-icons/fa";
 import MarkdownIt from 'markdown-it';
 import dog from './assets/dog.jpg';
@@ -15,7 +15,12 @@ const Project: Component = () => {
   createEffect(async () => {
     const projects = await listProjects();
     setProjectList(projects);
+    document.addEventListener('keyup', handleKeyUp);
   });
+
+  onCleanup(async () => {
+    document.removeEventListener('keyup', handleKeyUp)
+  })
 
   const selectNextProject = () => {
     const project = selectedProject();
@@ -44,11 +49,27 @@ const Project: Component = () => {
     setCurrentIndex(index);
   }
 
-  const deselectProject = (e: MouseEvent) => {
+  const handleClickOff = (e: MouseEvent) => {
     const modal = document.querySelector('#modal');
     if (modal && e.composedPath().includes(modal))
       return;
     setSelectedProject(null);
+  }
+
+  const handleKeyUp = (e: KeyboardEvent) => {
+    if (!selectedProject())
+      return;
+    switch(e.key) {
+      case 'ArrowLeft':
+        selectPreviousProject();
+        break;
+      case 'ArrowRight':
+        selectNextProject();
+        break;
+      case 'Escape':
+        setSelectedProject(null);
+        break;
+    }
   }
 
   return (
@@ -57,7 +78,7 @@ const Project: Component = () => {
         <div class="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black opacity-90"></div>
         <div
           class="absolute flex justify-center items-center w-screen h-screen left-0 top-0"
-          onclick={deselectProject}
+          onclick={handleClickOff}
         >
           <div
             id="modal" 
@@ -74,7 +95,7 @@ const Project: Component = () => {
         </div>
         <button
           class="absolute top-[24px] right-[24px] bg-white rounded-full cursor-pointer p-2"
-          onclick={deselectProject}
+          onclick={handleClickOff}
         >
           <FaSolidX />
         </button>
