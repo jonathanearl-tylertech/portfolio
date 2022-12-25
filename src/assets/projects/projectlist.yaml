@@ -1,9 +1,0 @@
-projects:
-- id: 0
-  url: /src/assets/projects/portfolio.md
-  media:
-  - /src/assets/dog.jpg
-- id: 1
-  url: /src/assets/projects/other.md
-  media:
-  - /src/assets/dog.jpg

@@ -20,7 +20,7 @@ export interface IProjectList {
 }
 
 export const listProjects = async () => {
-  const res = await fetch('/src/assets/projects/projectlist.yaml');
+  const res = await fetch('/projectlist.yaml');
   const data = await res.text();
   const list: IProjectList = parseYaml(data);
   return list.projects;

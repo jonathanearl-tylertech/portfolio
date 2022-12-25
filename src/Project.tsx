@@ -1,11 +1,6 @@
 import { Component, createEffect, createSignal, For, Show, onCleanup } from 'solid-js';
 import { FaSolidX, FaSolidArrowRight, FaSolidArrowLeft } from "solid-icons/fa";
-import MarkdownIt from 'markdown-it';
-import dog from './assets/dog.jpg';
 import { listProjects, getProject, IProjectMetadata, IProject } from './utils/project';
-
-const md = new MarkdownIt();
-
 
 const Project: Component = () => {
   const [currentIndex, setCurrentIndex] = createSignal(0);
@@ -84,12 +79,12 @@ const Project: Component = () => {
             id="modal" 
             class="flex"
           >
-            <img class="max-w-[764px] h-[764px] object-contain bg-black" src={dog} />
+            <img class="max-w-[764px] h-[764px] object-contain bg-black" src={selectedProject()?.metadata.media[0]} />
             <div class="w-[500px] bg-white">
               <header>
                 <h1>{selectedProject()?.metadata.name}</h1>
               </header>
-              <div innerHTML={md.render(selectedProject()?.content as string)}></div>
+              <div innerHTML={selectedProject()?.content}></div>
             </div>
           </div>
         </div>
@@ -118,15 +113,17 @@ const Project: Component = () => {
           </button>
         </Show>
       </Show>
-      <div class="text-[18px] leading-[24px] font-bold mt-[16px] mb-[24px] px-[20px]">Projects</div>
-      <div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
-        <For each={projectList()}>{(project, i) =>
-          <img class="h-[293px] w-[293px] object-cover cursor-pointer"
-            src={project.media[0]}
-            onclick={() => selectProject(i())}
-          />
-        }</For>
-      </div>
+      <Show when={projectList()}>
+        <div class="text-[18px] leading-[24px] font-bold mt-[16px] mb-[24px] px-[20px]">Projects</div>
+        <div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
+          <For each={projectList()}>{(project, i) =>
+            <img class="h-[293px] w-[293px] object-cover cursor-pointer"
+              src={project.media[0]}
+              onclick={() => selectProject(i())}
+            />
+          }</For>
+        </div>
+      </Show>
     </div >
   );
 };

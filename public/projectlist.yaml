@@ -1,0 +1,9 @@
+projects:
+- id: 0
+  url: /portfolio.md
+  media:
+  - /dog.jpg
+- id: 1
+  url: /other.md
+  media:
+  - /dog.jpg
