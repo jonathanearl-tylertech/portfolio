@@ -7,8 +7,8 @@ export interface IProject {
 }
 
 export interface IProjectMetadata {
+  id: number;
   name: string;
-  index: number;
   published: string;
   url: string;
   tags: string[];
@@ -23,11 +23,7 @@ export const listProjects = async () => {
   const res = await fetch('/src/assets/projects/projectlist.yaml');
   const data = await res.text();
   const list: IProjectList = parseYaml(data);
-  console.log(list);
-  const projectList = list.projects
-    .sort((a, b) => (Date.parse(a.published) - Date.parse(b.published)))
-  console.log(projectList);
-  return projectList;
+  return list.projects;
 }
 
 export const getProject = async (projectUrl: string) => {

@@ -1,4 +1,4 @@
-import { Component, createEffect, createResource, createSignal, For, Show } from 'solid-js';
+import { Component, createEffect, createSignal, For, Show } from 'solid-js';
 import { FaSolidX, FaSolidArrowRight, FaSolidArrowLeft } from "solid-icons/fa";
 import MarkdownIt from 'markdown-it';
 import dog from './assets/dog.jpg';
@@ -8,7 +8,7 @@ const md = new MarkdownIt();
 
 
 const Project: Component = () => {
-  // const [selectedProject, setSelectedProject] = createSignal(0)
+  const [currentIndex, setCurrentIndex] = createSignal(0);
   const [projectList, setProjectList] = createSignal([] as IProjectMetadata[]);
   const [selectedProject, setSelectedProject] = createSignal(null as IProject | null)
 
@@ -17,29 +17,31 @@ const Project: Component = () => {
     setProjectList(projects);
   });
 
-  const selectNextProject = (project: IProject | null) => {
-    console.log('project', project);
+  const selectNextProject = () => {
+    const project = selectedProject();
     if (!project)
       return;
-    selectProject(project.metadata.index + 1);
+    const currentIndex = projectList().findIndex(p => p.id === project.metadata.id);
+    selectProject(currentIndex + 1);
   }
 
-  const selectPreviousProject = (project: IProject | null) => {
+  const selectPreviousProject = () => {
+    const project = selectedProject();
     if (!project)
       return;
-    selectProject(project.metadata.index - 1);
+    const currentIndex = projectList().findIndex(p => p.id === project.metadata.id);
+    selectProject(currentIndex - 1);
   }
 
   const selectProject = async (index: number) => {
-    console.log('next', index)
     const url = projectList()[index]?.url;
     if (!url)
       return;
     const data = await getProject(url);
-    console.log({data});
     if (!data)
       return;
     setSelectedProject(data);
+    setCurrentIndex(index);
   }
 
   const deselectProject = () => {
@@ -68,33 +70,30 @@ const Project: Component = () => {
           >
             <FaSolidX />
           </button>
-          <button
-            class="absolute right-[24px] bg-white rounded-full p-2 cursor-pointer z-50"
-            onclick={(e) => { 
-              e.preventDefault(); 
-              console.log(selectedProject());
-              selectNextProject(selectedProject())
-            }}
-          >
-            <FaSolidArrowRight />
-          </button>
-          <button
-            class="absolute left-[24px] bg-white rounded-full p-2 cursor-pointer z-50"
-            onclick={() => {
-              console.log(selectedProject());
-              selectPreviousProject(selectedProject())
-            }}
-          >
-            <FaSolidArrowLeft />
-          </button>
+          <Show when={currentIndex() !== projectList().length - 1}>
+            <button
+              class="absolute right-[24px] bg-white rounded-full p-2 cursor-pointer z-50"
+              onclick={selectNextProject}
+            >
+              <FaSolidArrowRight />
+            </button>
+          </Show>
+          <Show when={currentIndex() !== 0}>
+            <button
+              class="absolute left-[24px] bg-white rounded-full p-2 cursor-pointer z-50"
+              onclick={selectPreviousProject}
+            >
+              <FaSolidArrowLeft />
+            </button>
+          </Show>
         </div>
       </Show>
       <div class="text-[18px] leading-[24px] font-bold mt-[16px] mb-[24px] px-[20px]">Projects</div>
       <div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
-        <For each={projectList()}>{(project) =>
-          <img class="h-[293px] w-[293px] object-cover" 
-            src={project.media[0]} 
-            onclick={() => selectProject(project.index)} 
+        <For each={projectList()}>{(project, i) =>
+          <img class="h-[293px] w-[293px] object-cover"
+            src={project.media[0]}
+            onclick={() => selectProject(i())}
           />
         }</For>
       </div>
