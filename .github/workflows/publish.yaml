@@ -1,0 +1,45 @@
+name: Publish
+on: push
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: whattheearl/porfolio
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Semantic version
+        id: semantic_version
+        uses: paulhatch/semantic-version@v4.0.2
+        with:
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          format: "${major}.${minor}.${patch}"
+          bump_each_commit: false
+          search_commit_body: false
+          user_format_type: "csv"
+
+      - name: Publish (ghcr.io)
+        shell: bash
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+          docker build --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.semantic_version.outputs.version }} .
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.semantic_version.outputs.version }}
+      
+      - name: Tag (github.com)
+        run: |
+          git config --global user.email "githubaction@noreply.com"
+          git config --global user.name "githubaction"
+          git tag "v${{ steps.semantic_version.outputs.version }}"
+          git push origin "v${{ steps.semantic_version.outputs.version }}"
