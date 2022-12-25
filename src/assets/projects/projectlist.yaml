@@ -1,0 +1,22 @@
+projects:
+- name: porfolio
+  index: 0
+  published: 12/24/2022
+  url: /src/assets/projects/portfolio.md
+  tags:
+  - solidjs
+  - frontend
+  - javascript
+  media:
+  - /src/assets/dog.jpg
+
+- name: other
+  index: 1
+  published: 12/24/2022
+  url: /src/assets/projects/other.md
+  tags:
+  - solidjs
+  - frontend
+  - javascript
+  media:
+  - /src/assets/dog.jpg

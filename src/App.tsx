@@ -7,8 +7,8 @@ import Project from './Project';
 const App: Component = () => {  
   const [links] = createSignal([
     // { name: 'home', href: '/', icon: FaSolidHouseChimney },
-    { name: 'projects', href: '/projects', icon: FaSolidDiagramProject },
     // { name: 'about', href: '/about', icon: FaSolidUserNinja },
+    { name: 'projects', href: '/', icon: FaSolidDiagramProject },
   ]);
 
   return (
@@ -27,9 +27,9 @@ const App: Component = () => {
         </nav>
       </div>
       <Routes>
-        <Route path="/" component={Home} />
-        <Route path="/about" element={<div>This site was made with Solid</div>} />
-        <Route path="/projects" component={Project} />
+        {/* <Route path="/" component={Home} /> */}
+        {/* <Route path="/about" element={<div>This site was made with Solid</div>} /> */}
+        <Route path="/" component={Project} />
       </Routes>
     </div>
   );
