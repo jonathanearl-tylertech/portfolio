@@ -2,12 +2,13 @@
 id: 0
 name: porfolio
 published: 12/24/2022
-url: /other.md
+url: /porfolio.md
 tags:
 - solidjs
 - frontend
 - javascript
 media:
+- /solidjs.png
 - /porfolio.excalidraw.svg
 ---
 # Porfolio
