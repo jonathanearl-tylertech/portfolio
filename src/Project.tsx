@@ -1,11 +1,13 @@
 import { Component, createEffect, createSignal, For, Show, onCleanup } from 'solid-js';
 import { FaSolidX, FaSolidArrowRight, FaSolidArrowLeft } from "solid-icons/fa";
-import { listProjects, getProject, IProjectMetadata, IProject } from './utils/project';
+import { listProjects } from './utils/projects';
+import Comments from './Comments';
+import { IProject } from './interfaces/projects';
 
 const Project: Component = () => {
   const [currentIndex, setCurrentIndex] = createSignal(0);
-  const [projectList, setProjectList] = createSignal([] as IProjectMetadata[]);
-  const [selectedProject, setSelectedProject] = createSignal(null as IProject | null)
+  const [projectList, setProjectList] = createSignal([] as IProject[]);
+  const [projectContent, setProjectContent] = createSignal(null as string | null)
 
   createEffect(async () => {
     const projects = await listProjects();
@@ -15,32 +17,27 @@ const Project: Component = () => {
 
   onCleanup(async () => {
     document.removeEventListener('keyup', handleKeyUp)
-  })
+  });
 
   const selectNextProject = () => {
-    const project = selectedProject();
+    const project = projectContent();
     if (!project)
       return;
-    const currentIndex = projectList().findIndex(p => p.id === project.metadata.id);
-    selectProject(currentIndex + 1);
+    selectProject(currentIndex() + 1);
   }
 
   const selectPreviousProject = () => {
-    const project = selectedProject();
+    const project = projectContent();
     if (!project)
       return;
-    const currentIndex = projectList().findIndex(p => p.id === project.metadata.id);
-    selectProject(currentIndex - 1);
+    selectProject(currentIndex() - 1);
   }
 
   const selectProject = async (index: number) => {
-    const url = projectList()[index]?.url;
-    if (!url)
+    const project = projectList()[index];
+    if (!project)
       return;
-    const data = await getProject(url);
-    if (!data)
-      return;
-    setSelectedProject(data);
+    setProjectContent(project.content);
     setCurrentIndex(index);
   }
 
@@ -48,11 +45,11 @@ const Project: Component = () => {
     const modal = document.querySelector('#modal');
     if (modal && e.composedPath().includes(modal))
       return;
-    setSelectedProject(null);
+    setProjectContent(null);
   }
 
   const handleKeyUp = (e: KeyboardEvent) => {
-    if (!selectedProject())
+    if (!projectContent())
       return;
     switch(e.key) {
       case 'ArrowLeft':
@@ -62,14 +59,14 @@ const Project: Component = () => {
         selectNextProject();
         break;
       case 'Escape':
-        setSelectedProject(null);
+        setProjectContent(null);
         break;
     }
   }
 
   return (
     <div class="mx-auto">
-      <Show when={selectedProject()}>
+      <Show when={projectContent()}>
         <div class="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black opacity-90"></div>
         <div
           class="absolute flex justify-center items-center w-screen h-screen left-0 top-0"
@@ -79,12 +76,12 @@ const Project: Component = () => {
             id="modal" 
             class="flex"
           >
-            <img class="max-w-[764px] h-[764px] object-contain bg-black" src={selectedProject()?.metadata.media[0]} />
-            <div class="w-[500px] bg-white">
-              <div 
-                class="markdown-body p-[24px]"
-                innerHTML={selectedProject()?.content}
-              />
+            <div 
+              class="markdown-body p-[24px] max-w-[764px] h-[764px]"
+              innerHTML={projectContent() as string}
+            />
+            <div class="w-[500px] bg-white border-l-[1px]">
+              <Comments />
             </div>
           </div>
         </div>
@@ -118,7 +115,7 @@ const Project: Component = () => {
         <div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
           <For each={projectList()}>{(project, i) =>
             <img class="h-[293px] w-[293px] object-cover cursor-pointer"
-              src={project.media[0]}
+              src={project.media}
               onclick={() => selectProject(i())}
             />
           }</For>

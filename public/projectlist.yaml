@@ -1,9 +1,0 @@
-projects:
-- id: 0
-  url: /portfolio.md
-  media:
-  - /solidjs.png
-- id: 1
-  url: /other.md
-  media:
-  - /dog.jpg
