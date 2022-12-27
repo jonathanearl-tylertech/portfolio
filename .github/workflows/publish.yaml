@@ -22,13 +22,13 @@ jobs:
         id: semantic_version
         uses: paulhatch/semantic-version@v4.0.2
         with:
-          tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          minor_pattern: "(MINOR)"
-          format: "${major}.${minor}.${patch}"
+          tag_prefix: 'v'
+          major_pattern: '(MAJOR)'
+          minor_pattern: '(MINOR)'
+          format: '${major}.${minor}.${patch}'
           bump_each_commit: false
           search_commit_body: false
-          user_format_type: "csv"
+          user_format_type: 'csv'
 
       - name: Publish (ghcr.io)
         shell: bash
@@ -36,7 +36,7 @@ jobs:
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
           docker build --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.semantic_version.outputs.version }} .
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.semantic_version.outputs.version }}
-      
+
       - name: Tag (github.com)
         run: |
           git config --global user.email "githubaction@noreply.com"
