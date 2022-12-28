@@ -25,4 +25,3 @@ export const K8S_METADATA: IProject = {
 	media: media
 };
 
-console.log(K8S_METADATA);
