@@ -23,15 +23,14 @@
 		setProj(projList[projList.indexOf(project) + 1]);
 	};
 
-  const handleKeyUp = (e: KeyboardEvent) => {
-		if (!proj) 
-      return;
+	const handleKeyUp = (e: KeyboardEvent) => {
+		if (!proj) return;
 		switch (e.key) {
 			case 'ArrowLeft':
-        prevProject(proj);
+				prevProject(proj);
 				break;
 			case 'ArrowRight':
-        nextProject(proj);
+				nextProject(proj);
 				break;
 			case 'Escape':
 				unsetProj();
@@ -39,26 +38,22 @@
 		}
 	};
 
-  onMount(() => {
-    document.addEventListener('keyup', handleKeyUp);
-    return () => document.removeEventListener('keyup', handleKeyUp);
-  });
+	const handleClickOff = (e: MouseEvent) => {
+		const modal = document.querySelector('#modal');
+		if (e.target instanceof HTMLImageElement) return;
+		if (e.target instanceof SVGElement || e.target instanceof HTMLButtonElement) return;
+		if (modal && e.composedPath().includes(modal)) return;
+		unsetProj();
+	};
+
+	onMount(() => {
+		document.addEventListener('keyup', handleKeyUp);
+		return () => document.removeEventListener('keyup', handleKeyUp);
+	});
 </script>
 
-<div class="mx-auto">
-	<div class="text-[18px] leading-[24px] font-bold mt-[16px] mb-[24px] px-[20px]">Projects</div>
-	<div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
-		{#each projList as p}
-			<img
-				class="h-[293px] w-[293px] object-cover cursor-pointer"
-				src={p.media}
-				alt={p.name}
-				on:click={() => setProj(p)}
-				on:keydown={() => setProj(p)}
-			/>
-		{/each}
-	</div>
-
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="mx-auto" on:click={handleClickOff}>
 	{#if proj}
 		<div
 			class="absolute flex justify-center items-center w-screen h-screen left-0 top-0 bg-black opacity-90"
@@ -91,14 +86,27 @@
 			</button>
 		{/if}
 
-    {#if projList.indexOf(proj) !== projList.length - 1}
-		<button
-			id="next-button"
-			class="absolute right-[24px] top-1/2 translate-y-1/2 bg-white rounded-full p-2 cursor-pointer z-50"
-			on:click={() => nextProject(proj)}
-		>
-			<ArrowRightIcon />
-		</button>
-    {/if}
+		{#if projList.indexOf(proj) !== projList.length - 1}
+			<button
+				id="next-button"
+				class="absolute right-[24px] top-1/2 translate-y-1/2 bg-white rounded-full p-2 cursor-pointer z-50"
+				on:click={() => nextProject(proj)}
+			>
+				<ArrowRightIcon />
+			</button>
+		{/if}
 	{/if}
+	<div class="text-[18px] leading-[24px] font-bold mt-[16px] mb-[24px] px-[20px]">Projects</div>
+	<div class="px-[20px] w-[935px] grid grid-cols-3 gap-[28px]">
+		{#each projList as p}
+			<img
+				class="project h-[293px] w-[293px] object-cover cursor-pointer"
+				draggable="false"
+				src={p.media}
+				alt={p.name}
+				on:click={() => setProj(p)}
+				on:keydown={() => setProj(p)}
+			/>
+		{/each}
+	</div>
 </div>
