@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { XIcon } from 'svelte-feather-icons';
 	import LoginEmailStep from './Login-email-step.svelte';
-	import LoginRegisterStep from './login-register-step.svelte';
+	import LoginRegisterStep from './Login-register-step.svelte';
 
 	let email = '';
-</script>
+</script> 
 
 <div class="absolute left-0 top-0 w-screen h-screen bg-black opacity-50" />
 <div class="absolute left-0 top-0 w-screen h-screen flex justify-center items-center ">

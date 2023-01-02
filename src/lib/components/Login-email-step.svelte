@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isEmail, EMAIL_PATTERN_ERROR } from '$lib/validation/registration';
+  import { EMAIL_PATTERN_ERROR, isEmail } from '$lib/validation/email';
 	import { CheckCircleIcon } from 'svelte-feather-icons';
 	export let email = '';
 	let emailValue = '';
@@ -18,14 +18,13 @@
 	};
 
 	let timout: any;
-	const handleOnChange = (e: any) => {
+	const handleOnChange = () => {
 		isSuccessVisible = false;
 		clearTimeout(timout);
 		timout = setTimeout(handleValidation, 1000);
 	};
 
-	const handleSubmit = (e: any) => {
-		e.preventDefault();
+	const handleSubmit = () => {
 		email = emailValue;
 	};
 </script>
@@ -59,7 +58,7 @@
 	<button
 		class={`w-full rounded-full bold bg-blue-500 text-white font-semibold p-2 mb-8
       ${!isSuccessVisible && 'bg-blue-100'}`}
-		on:click={handleSubmit}
+		on:click|preventDefault={handleSubmit}
 		disabled={!isSuccessVisible}>Continue</button
 	>
 	<div class="flex">

@@ -1,7 +1,8 @@
 import { createSession } from '$lib/prisma/session';
 import { createUser, findUserByUsername } from '$lib/prisma/user';
 import { hashPassword } from '$lib/utils/auth';
-import { isCreateUser, isUsername } from '$lib/validation/registration';
+import { isCreateUser } from '$lib/validation/user';
+import { isUsername } from '$lib/validation/username';
 import { json, error } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
 

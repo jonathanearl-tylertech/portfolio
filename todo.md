@@ -6,14 +6,14 @@
 - [ ] pull modal into component
 
 ## auth
-- [ ] registration
-- [ ] basic login page modal
-- [ ] add data store (sqlite? graph?)
-- [ ] add ORM
-- [ ] add user
-- [ ] login user (send back jwt or ?)
+- [x] registration
+- [x] basic login page
+- [x] add data store (sqlite? graph?)
+- [x] add ORM
+- [x] add user
+- [x] login user (session for now)
 - [ ] configure openid connect (github)
-- [ ] add authz middleware
+- [ ] add authz middleware?
 
 <!-- maybe reverse the order -->
 1. mobile

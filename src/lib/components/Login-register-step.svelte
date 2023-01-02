@@ -1,7 +1,13 @@
 <script lang="ts">
-  import { isCreateUser, isPassword, isUsername, PASSWORD_LEN_ERR, USERNAME_CHAR_ERR, USERNAME_LEN_ERR, USERNAME_USE_ERR } from '$lib/validation/registration';
+	import { isPassword } from '$lib/validation/password';
+	import { isCreateUser, PASSWORD_LEN_ERR } from '$lib/validation/user';
+	import {
+		isUsername,
+		USERNAME_CHAR_ERR,
+		USERNAME_LEN_ERR,
+		USERNAME_USE_ERR
+	} from '$lib/validation/username';
 	import { XIcon, CheckCircleIcon } from 'svelte-feather-icons';
-
 
 	export let email: string;
 	let username = '';
@@ -10,8 +16,8 @@
 	let password = '';
 	let passwordError = '';
 
-  $: isValid = isCreateUser({ email, username, password }) === null;
-  
+	$: isValid = isCreateUser({ email, username, password }) === null;
+
 	let timout: number;
 	const debounce = (callback: Function) => {
 		usernameVerified = false;
@@ -21,36 +27,35 @@
 
 	const verifyUsername = async () => {
 		const errors = isUsername(username);
-    console.log(errors);
-    if (!errors) {
-  		const res = await fetch(`/registration?username=${username}`);
-      usernameError = res.status === 409 ? USERNAME_USE_ERR : '';
-      return;
-    }
-    switch(errors[0].keyword) {
-      case 'minLength':
-      case 'maxLength':
-        usernameError = USERNAME_LEN_ERR;
-        return;
-      case 'format':
-        usernameError = USERNAME_CHAR_ERR;
-        return;
-    }
+		console.log(errors);
+		if (!errors) {
+			const res = await fetch(`/registration?username=${username}`);
+			usernameError = res.status === 409 ? USERNAME_USE_ERR : '';
+			return;
+		}
+		switch (errors[0].keyword) {
+			case 'minLength':
+			case 'maxLength':
+				usernameError = USERNAME_LEN_ERR;
+				return;
+			case 'format':
+				usernameError = USERNAME_CHAR_ERR;
+				return;
+		}
 	};
-  
+
 	const verifyPassword = async () => {
 		const errors = isPassword(password);
-    if (!errors) {
-      passwordError = '';
-      return;
-    }
-    switch(errors[0].keyword) {
-      case 'minLength':
-      case 'maxLength':
-        passwordError = PASSWORD_LEN_ERR;
-        return;
-    }
-		// passwordError = errors.join(', ');
+		if (!errors) {
+			passwordError = '';
+			return;
+		}
+		switch (errors[0].keyword) {
+			case 'minLength':
+			case 'maxLength':
+				passwordError = PASSWORD_LEN_ERR;
+				return;
+		}
 	};
 
 	const createUser = async () => {
@@ -59,11 +64,8 @@
 			body: JSON.stringify({ email, username, password })
 		});
 		if (res.status !== 200) {
-			// const { message, usernameErrors, passwordErrors, emailErrors } =
-			// 	(await res.json()) as RegistrationError;
-			// usernameError = usernameErrors.join(', ');
-			// passwordError = passwordErrors.join(', ');
-			// console.error(message);
+			const err = res.json();
+			console.error(err);
 		}
 	};
 
@@ -115,7 +117,7 @@
 		</div>
 	</div>
 
-	<button class={buttonClass} on:click={createUser} >Continue</button>
+	<button class={buttonClass} on:click|preventDefault={createUser}>Continue</button>
 	<div class="flex">
 		<span class="text-black">Already a have an account?</span>
 		<div class="ml-2 text-blue-500">Log in</div>
