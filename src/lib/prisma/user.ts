@@ -15,9 +15,29 @@ export const findUserByUsername = async (username: string) => {
   const user = await prisma.user.findFirst({
     where: {
       username
+    },
+    include: {
+      posts: true
     }
   });
   return user;
+}
+
+export const findUserBySid = async (sid: string) => {
+  const session = await prisma.session.findUnique({
+    where: { id: sid },
+    include: {
+      user: {
+        select: {
+          bio: true,
+          email: true,
+          username: true,
+          posts: true,
+        }
+      }
+    },
+  });
+  return session;
 }
 
 export async function createUser(email: string, password: string, username: string) {
