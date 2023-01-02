@@ -16,6 +16,5 @@ const validateEmail = ajv.compile(emailSchema);
 
 export const isEmail = (email: string) => {
   validateEmail(email);
-  console.log('emailerros', validateEmail.errors)
   return validateEmail.errors;
 }

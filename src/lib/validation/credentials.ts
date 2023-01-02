@@ -23,6 +23,5 @@ const validateCredentials = ajv.compile(credentialsSchema);
 
 export const isCredentials = (credentials: Credentials) => {
   validateCredentials(credentials);
-  console.log(validateCredentials.errors);
   return validateCredentials.errors;
 }

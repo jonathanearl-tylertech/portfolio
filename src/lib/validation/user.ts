@@ -29,6 +29,5 @@ const validateCreateUser = ajv.compile(createUserSchema);
 
 export const isCreateUser = (createUser: any) => {
   validateCreateUser(createUser);
-  console.log(validateCreateUser.errors);
   return validateCreateUser.errors;
 }
