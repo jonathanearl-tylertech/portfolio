@@ -1,9 +1,12 @@
 <script lang="ts">
 	import '../../app.css';
-	import { HomeIcon } from 'svelte-feather-icons';
+	import { HomeIcon, PlusSquareIcon } from 'svelte-feather-icons';
 
 	const data = {
-		links: [{ name: 'projects', href: '/', icon: 'HomeIcon' }]
+		links: [
+			{ name: 'new project', href: '/project', icon: 'AddProject' },
+			{ name: 'projects', href: '/', icon: 'HomeIcon' }
+		]
 	};
 </script>
 
@@ -16,11 +19,14 @@
 					{#if link.icon === 'HomeIcon'}
 						<HomeIcon class="mr-[16px] text-[24px]" />
 					{/if}
+					{#if link.icon === 'AddProject'}
+						<PlusSquareIcon class="mr-[16px] text-[24px]" />
+					{/if}
 					<span class="leading-[24px] text-[16px]">{link.name}</span>
 				</a>
 			{/each}
 		</nav>
-    <button>Login</button>
+		<button>Login</button>
 	</section>
 	<main class="w-full h-full">
 		<slot />

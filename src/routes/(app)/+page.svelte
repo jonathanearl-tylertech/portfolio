@@ -4,7 +4,7 @@
 	import type { IProject } from '$lib/utils/projects';
 	import Comment from '$lib/components/Comment.svelte';
 	import { onMount } from 'svelte';
-  import Login from '$lib/components/Login.svelte';
+
   /** @type {import('./$types').PageData} */
   export let data;
   console.log({data})
@@ -55,7 +55,6 @@
 	});
 </script>
 
-<!-- <Login /> -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="mx-auto" on:click={handleClickOff}>
 	{#if proj}
