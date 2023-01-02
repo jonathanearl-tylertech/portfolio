@@ -2,10 +2,13 @@
 	import { ArrowLeftIcon, ArrowRightIcon, XIcon } from 'svelte-feather-icons';
 	import { listProjects } from '$lib/utils/projects';
 	import type { IProject } from '$lib/utils/projects';
-	import Comment from '$lib/Comment.svelte';
+	import Comment from '$lib/components/Comment.svelte';
 	import { onMount } from 'svelte';
-
-	const projList: IProject[] = listProjects();
+  import Login from '$lib/components/Login.svelte';
+  /** @type {import('./$types').PageData} */
+  export let data;
+  console.log({data})
+  const projList: IProject[] = listProjects();
 	let proj: IProject | null = null;
 
 	const setProj = (project: IProject) => {
@@ -52,6 +55,7 @@
 	});
 </script>
 
+<!-- <Login /> -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="mx-auto" on:click={handleClickOff}>
 	{#if proj}
