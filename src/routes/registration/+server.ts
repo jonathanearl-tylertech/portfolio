@@ -1,5 +1,6 @@
 import { createSession } from '$lib/prisma/session';
 import { createUser, findUserByUsername } from '$lib/prisma/user';
+import { hashPassword } from '$lib/utils/auth';
 import { isCreateUser, isUsername } from '$lib/validation/registration';
 import { json, error } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
@@ -26,7 +27,8 @@ export async function POST({ request, cookies }: RequestEvent) {
   if (errors)
     throw error(400, { message: `Invalid request. ${errors.toString()}`})
 
-  const user = await createUser(data.email, data.password, data.username);
+  const hash = await hashPassword(data.password);
+  const user = await createUser(data.email, hash, data.username);
   const session = await createSession(user);
   cookies.set('sid', session.id);
   return json(null);
