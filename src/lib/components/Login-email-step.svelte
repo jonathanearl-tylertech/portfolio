@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { EMAIL_PATTERN_ERROR, isEmail } from '$lib/validation/email';
+  import { isEmail } from '$lib/validation/email';
 	import { CheckCircleIcon } from 'svelte-feather-icons';
 	export let email = '';
 	let emailValue = '';
@@ -8,8 +8,8 @@
 
 	const handleValidation = () => {
 		const errors = isEmail(emailValue);
-		if (errors && errors.length > 0) {
-      emailError = EMAIL_PATTERN_ERROR;
+		if (errors && errors.email.length > 0) {
+      emailError = errors.email.join(', ');
     }
 		else {
       emailError = '';
