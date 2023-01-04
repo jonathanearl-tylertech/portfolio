@@ -1,12 +1,7 @@
 <script lang="ts">
 	import '../../app.css';
-
-  /** @type {import('./$types').ActionData} */
-	export let form: {
-		email: string;
-		username: string;
-		password: string;
-	};
+  import type { ActionData } from './$types';
+	export let form: ActionData;
 </script>
 
 <div class="flex w-screen h-screen justify-center items-center bg-[rgb(250,250,250)]">
@@ -26,6 +21,11 @@
 					placeholder="email"
 					value={form?.email ?? ''}
 				/>
+				{#if form?.validationErrors?.email}
+					{#each form?.validationErrors?.email as emailErr}
+						<div>{emailErr}</div>
+					{/each}
+				{/if}
 			</div>
 		</div>
 
@@ -38,6 +38,11 @@
 					placeholder="Username"
 					value={form?.username ?? ''}
 				/>
+				{#if form?.validationErrors?.username}
+					{#each form?.validationErrors?.username as usernameErr}
+						<div>{usernameErr}</div>
+					{/each}
+				{/if}
 			</div>
 		</div>
 
@@ -55,7 +60,7 @@
 		<button
 			class={'w-full rounded-full bold bg-blue-500 text-white font-semibold p-2 mb-8 uppercase'}
 		>
-			Log in
+			SIGN UP
 		</button>
 		<div class="flex">
 			<span class="text-black">Already a have an account?</span>

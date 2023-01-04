@@ -1,7 +1,8 @@
 import { createSession } from '$lib/prisma/session';
 import { createUser, findUserByUsername } from '$lib/prisma/user';
 import { hashPassword } from '$lib/utils/auth';
-import { isCreateUser } from '$lib/validation/user';
+import { isRegistration } from '$lib/validation/registration';
+// import { isCreateUser } from '$lib/validation/user';
 import { isUsername } from '$lib/validation/username';
 import { json, error } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
@@ -24,7 +25,7 @@ export async function GET({ request }: { request: Request }) {
 /** @type {import('./$types').RequestsHandler} */
 export async function POST({ request, cookies }: RequestEvent) {
   const data = await request.json();
-  const errors = isCreateUser(data)
+  const errors = isRegistration(data)
   if (errors)
     throw error(400, { message: `Invalid request. ${errors.toString()}`})
 
