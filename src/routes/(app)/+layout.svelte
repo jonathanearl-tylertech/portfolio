@@ -20,7 +20,7 @@
 				</a>
 			{/each}
 		</nav>
-    <button>Login</button>
+		<button>Login</button>
 	</section>
 	<main class="w-full h-full">
 		<slot />

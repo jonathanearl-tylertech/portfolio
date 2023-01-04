@@ -1,13 +1,8 @@
 <script lang="ts">
-	import { isPassword } from '$lib/validation/password';
-	import { isCreateUser, PASSWORD_LEN_ERR } from '$lib/validation/user';
-	import {
-		isUsername,
-		USERNAME_CHAR_ERR,
-		USERNAME_LEN_ERR,
-		USERNAME_USE_ERR
-	} from '$lib/validation/username';
-	import { XIcon, CheckCircleIcon } from 'svelte-feather-icons';
+  import { isPassword } from '$lib/validation/password';
+  import { isRegistration } from '$lib/validation/registration';
+  import { isUsername } from '$lib/validation/username';
+	import { CheckCircleIcon } from 'svelte-feather-icons';
 
 	export let email: string;
 	let username = '';
@@ -16,7 +11,7 @@
 	let password = '';
 	let passwordError = '';
 
-	$: isValid = isCreateUser({ email, username, password }) === null;
+	$: isValid = isRegistration({ email, username, password }) === null;
 
 	let timout: number;
 	const debounce = (callback: Function) => {
@@ -26,36 +21,24 @@
 	};
 
 	const verifyUsername = async () => {
-		const errors = isUsername(username);
-		console.log(errors);
-		if (!errors) {
-			const res = await fetch(`/registration?username=${username}`);
-			usernameError = res.status === 409 ? USERNAME_USE_ERR : '';
-			return;
-		}
-		switch (errors[0].keyword) {
-			case 'minLength':
-			case 'maxLength':
-				usernameError = USERNAME_LEN_ERR;
-				return;
-			case 'format':
-				usernameError = USERNAME_CHAR_ERR;
-				return;
-		}
+		const errors = isUsername({username} as any);
+    if (errors && errors.username.length > 0) {
+      usernameError = errors.username.join(', ');
+      return;
+    }
+
+    const res = await fetch(`/registration?username=${username}`);
+    usernameError = res.status === 409 ? 'Username is already taken' : '';
+    return;
 	};
 
 	const verifyPassword = async () => {
 		const errors = isPassword(password);
-		if (!errors) {
-			passwordError = '';
-			return;
-		}
-		switch (errors[0].keyword) {
-			case 'minLength':
-			case 'maxLength':
-				passwordError = PASSWORD_LEN_ERR;
-				return;
-		}
+    if (errors && errors.password.length > 0) {
+      passwordError = errors.password.join(', ');
+      return;
+    }
+    passwordError = '';
 	};
 
 	const createUser = async () => {

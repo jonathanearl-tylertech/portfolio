@@ -21,18 +21,18 @@ const register: Action = async ({ request, cookies }: RequestEvent) => {
   const email = formData.get('email');
   const username = formData.get('username');
   const password = formData.get('password');
-  const formErrors = isRegistration({
+  const errors = isRegistration({
     email: email as string, 
     username: username as string, 
     password: password as string
   })
-  console.log(formErrors);
-  if (formErrors) {
+  console.log(errors);
+  if (errors) {
     return fail(400, {
       email,
       username,
       password,
-      validationErrors: formErrors,
+      errors,
     });
   }
 

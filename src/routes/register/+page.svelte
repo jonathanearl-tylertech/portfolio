@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../../app.css';
-  import type { ActionData } from './$types';
+	import type { ActionData } from './$types';
 	export let form: ActionData;
 </script>
 
@@ -21,11 +21,9 @@
 					placeholder="email"
 					value={form?.email ?? ''}
 				/>
-				{#if form?.validationErrors?.email}
-					{#each form?.validationErrors?.email as emailErr}
-						<div>{emailErr}</div>
-					{/each}
-				{/if}
+				{#each form?.errors?.email || [] as err}
+					<div>{err}</div>
+				{/each}
 			</div>
 		</div>
 
@@ -38,11 +36,9 @@
 					placeholder="Username"
 					value={form?.username ?? ''}
 				/>
-				{#if form?.validationErrors?.username}
-					{#each form?.validationErrors?.username as usernameErr}
-						<div>{usernameErr}</div>
-					{/each}
-				{/if}
+				{#each form?.errors?.username || [] as err}
+					<div>{err}</div>
+				{/each}
 			</div>
 		</div>
 
@@ -54,6 +50,9 @@
 					type="password"
 					placeholder="Password"
 				/>
+				{#each form?.errors?.password || [] as err}
+					<div>{err}</div>
+				{/each}
 			</div>
 		</div>
 

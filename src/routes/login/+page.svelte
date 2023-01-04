@@ -1,12 +1,8 @@
 <script lang="ts">
 	import '../../app.css';
+	import type { ActionData } from './$types';
 
-  /** @type {import('./$types').ActionData} */
-  export let form: { 
-    username: string | undefined;
-    password: string | undefined;
-  };
-  console.log({form});
+	export let form: ActionData;
 </script>
 
 <div class="flex w-screen h-screen justify-center items-center bg-[rgb(250,250,250)]">
@@ -24,8 +20,11 @@
 					class={'py-2 px-8 bg-gray-100 rounded border focus-visible:outline-gray-500'}
 					type="text"
 					placeholder="Username"
-          value={form?.username ?? ''}
+					value={form?.username ?? ''}
 				/>
+				{#each form?.errors?.username || [] as errorMessage}
+					<div>{errorMessage}</div>
+				{/each}
 			</div>
 		</div>
 
@@ -38,6 +37,9 @@
 					placeholder="Password"
 				/>
 			</div>
+			{#each form?.errors?.password || [] as errorMessage}
+				<div>{errorMessage}</div>
+			{/each}
 		</div>
 
 		<button
