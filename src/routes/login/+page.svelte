@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '../../app.css';
+	import '../app.css';
 	import type { ActionData } from './$types';
 
 	export let form: ActionData;
